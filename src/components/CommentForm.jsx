@@ -10,9 +10,6 @@ const COMMENT_INITIAL_STATE = {
 const CommentForm = (props) => {
   const [comment, setComment] = useState(COMMENT_INITIAL_STATE);
   //setComment(COMMENT_INITIAL_STATE);
-  
-
-
 
   const handleOnChange = (e) => {
     setComment({ ...comment, [e.target.name]: e.target.value });
