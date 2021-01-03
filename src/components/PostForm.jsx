@@ -1,10 +1,10 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { api } from "../api"
 
 const PostForm = (props) => {
-  const [post, setPost] = useState({ title: "", content: "" });
+  const [post, setPost] = useState({ title: "", content:"" });
   const [error, setError] = useState("");
 
   const onInputChange = (event) =>
@@ -13,15 +13,33 @@ const PostForm = (props) => {
   const onFormSubmit = (event) => {
     event.preventDefault();
     setError("");
-    api()
-      .post("/posts", post)
-      .then((response) => {
-        props.history.push("/");
-      })
-      .catch((err) => {
-        setError("Post title and post content are required.");
-      });
+
+    if(props.post.title){
+      api().put(`/posts/${props.match.params.id}`,post)
+        .then((response) => {
+          props.history.push(`/posts/${props.match.params.id}`)
+        })
+        .catch((err) => {
+          setError("Post title and post content are required.");
+        });
+    }
+    else{
+      api()
+        .post("/posts", post)
+        .then((response) => {
+          props.history.push("/");
+        })
+        .catch((err) => {
+          setError("Post title and post content are required.");
+        });
+    }
   };
+
+  useEffect(() => {
+    if(props.post.title && props.post.content) {
+      setPost(props.post)
+    }
+  },[props.post])
 
   return (
     <React.Fragment>
@@ -31,7 +49,6 @@ const PostForm = (props) => {
           <p>{error}</p>
         </div>
       )} 
-        <h3>Add New Post</h3>
         <div className="ui form">
           <div className="field">
             <label>Post Title</label>
