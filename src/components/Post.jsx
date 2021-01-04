@@ -3,13 +3,12 @@ import axios from "axios";
 import PostComments from "./PostComments";
 import { api } from "../api";
 import { Link } from 'react-router-dom';
+import DeleteModal from './DeleteModal'
 
 const Post = (props) => {
   const { id } = props.match.params;
   const [post, setPost] = useState({});
-  const [comments, setComments] = useState([]);
-  // const [display_name, setDisplay_name] = useState('');
-  // const [body, setBody] = useState('');
+  const [comments, setComments] = useState([]); 
 
   const handleCommentSubmit = (e, comment) => {
     e.preventDefault();
@@ -40,8 +39,8 @@ const Post = (props) => {
       <h2 className="ui header">{post.title}</h2>
       <p>{post.created_at}</p>
       <div className="ui buttons">
-        <Link to={`/posts/${post.id}/edit`} className="ui teal button">Edit</Link>
-        <button className="ui red button">Delete</button>       
+        <Link to={`/posts/${post.id}/edit`} className="ui teal button">Edit Post</Link>
+        <DeleteModal post={post} push={props.history.push}/>
       </div>
       <p>{post.content}</p>
 
