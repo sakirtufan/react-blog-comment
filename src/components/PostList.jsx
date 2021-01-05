@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api"
 
-const PostList = () => {
+const PostList = (props) => {
   const [postList, setPostList] = useState([]);
 
   useEffect(() => {
@@ -15,6 +15,7 @@ const PostList = () => {
 
   return (
     <div className="ui relaxed divided list">
+      <Link to="/addPost" className="ui secondary button">Add Post</Link>
       {postList.map((post) => {
         return (
           <div key={post.id} className="item">
