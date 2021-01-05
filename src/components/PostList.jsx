@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { api } from "../api"
+import getPostList from '../redux/actions/index'
 
-const PostList = () => {
-  const [postList, setPostList] = useState([]);
+const PostList = () => {  
+
+  const postList = useSelector((state) => state.postList);
+  const dispatch = useDispatch();  
 
   useEffect(() => {
-    api()
-      .get("/posts")
-      .then((response) => {
-        setPostList(response.data);
-      });
+    dispatch(getPostList())
   }, []);
 
   return (
     <div className="ui relaxed divided list">
+      <Link className="ui secondary button" to="/addPost">Add Post</Link>
       {postList.map((post) => {
         return (
           <div key={post.id} className="item">

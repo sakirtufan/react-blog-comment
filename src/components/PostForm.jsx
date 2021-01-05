@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import { withRouter, useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { api } from "../api"
 
 const PostForm = (props) => {
@@ -18,7 +18,7 @@ const PostForm = (props) => {
     event.preventDefault();
     setError("");
 
-    if(props.post.title){
+    if(props.post?.title){
       api().put(`/posts/${id}`,post)
         .then((response) => {
           history.push(`/posts/${id}`)
@@ -40,7 +40,7 @@ const PostForm = (props) => {
   };
 
   useEffect(() => {
-    if(props.post.title && props.post.content) {
+    if(props.post?.title && props.post?.content) {
       setPost(props.post)
     }
   },[props.post])
