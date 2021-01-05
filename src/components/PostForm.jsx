@@ -18,7 +18,7 @@ const PostForm = (props) => {
     event.preventDefault();
     setError("");
 
-    if(props.post.title){
+    if(props.post?.title){
       api().put(`/posts/${id}`,post)
         .then((response) => {
           history.push(`/posts/${id}`)
