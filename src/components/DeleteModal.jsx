@@ -1,25 +1,20 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { Button,Modal } from 'semantic-ui-react'
-import { api } from "../api";
+import { deletePost } from "../redux/actions";
 
-const DeleteModal = ({ post,push }) => {
+const DeleteModal = ({ post }) => {
   const [open, setOpen] = useState(false);
-  const [error,setError] = useState('');
+  const error = useSelector((state) => state.deletePostError)
   const show = () => setOpen(true);
   const close = () => setOpen(false);
+  const { push } = useHistory();
+
+  const dispatch = useDispatch();
 
   const handleDelete = (id) => {
-    api().delete('/posts/' + id)
-      .then((response) =>{
-        setError('');
-        // modal close
-        close();
-        // push to home
-        push('/')
-      })
-      .catch(() =>{
-        setError('Error while deleting');
-      })
+    dispatch(deletePost(id, close, push))
   }
 
   return (

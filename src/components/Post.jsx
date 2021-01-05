@@ -1,39 +1,25 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
 import PostComments from "./PostComments";
-import { api } from "../api";
 import { Link, useHistory, useParams} from 'react-router-dom';
 import DeleteModal from './DeleteModal';
+import { addComment, getPost } from "../redux/actions";
+import { useDispatch, useSelector } from "react-redux";
 
 
 const Post = (props) => {
   // const { id } = props.match.params;
   const { id } = useParams();
-  const [post, setPost] = useState({});
-  const [comments, setComments] = useState([]); 
+  const dispatch = useDispatch();
 
+  const post = useSelector(state => state.post)
+  
   const handleCommentSubmit = (e, comment) => {
     e.preventDefault();
-    api()
-      .post(`/posts/${id}/comments`, comment)
-      .then((response) => {
-        setComments([...comments, response.data]);
-      })
-      .catch((error) => {
-        window.alert(error);
-      });
+    dispatch(addComment(id, comment))
   };
-
+  
   useEffect(() => {
-    axios
-      .all([api().get(`/posts/${id}`), api().get(`/posts/${id}/comments`)])
-      .then((responses) => {
-        setPost(responses[0].data);
-        setComments(responses[1].data);
-      })
-      .catch((err) => {
-        window.alert(err);
-      });
+    dispatch(getPost(id))
   }, []);
 
   return (
@@ -43,12 +29,12 @@ const Post = (props) => {
       <div className="ui buttons">
         <Link to={`/posts/${post.id}/edit`} className="ui teal button">Edit Post</Link>
         {/* <DeleteModal post={post} push={props.history.push}/> */}
-        <DeleteModal post={post} push={useHistory().push}/>
+        <DeleteModal post={post}/>
       </div>
       <p>{post.content}</p>
 
       <PostComments
-        comments={comments}
+        comments={post.comments}
         handleCommentSubmit={handleCommentSubmit}
       />
     </React.Fragment>

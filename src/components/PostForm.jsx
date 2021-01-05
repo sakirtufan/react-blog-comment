@@ -1,7 +1,9 @@
 
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
 import { api } from "../api"
+import { editPost } from "../redux/actions";
 
 const PostForm = (props) => {
   const [post, setPost] = useState({ title: "", content:"" });
@@ -10,6 +12,7 @@ const PostForm = (props) => {
   //react router hooks
   const { id } = useParams();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const onInputChange = (event) =>
     setPost({ ...post, [event.target.name]: event.target.value });
@@ -19,13 +22,7 @@ const PostForm = (props) => {
     setError("");
 
     if(props.post?.title){
-      api().put(`/posts/${id}`,post)
-        .then((response) => {
-          history.push(`/posts/${id}`)
-        })
-        .catch((err) => {
-          setError("Post title and post content are required.");
-        });
+      dispatch(editPost(id, post, history.push))
     }
     else{
       api()
@@ -41,7 +38,7 @@ const PostForm = (props) => {
 
   useEffect(() => {
     if(props.post?.title && props.post?.content) {
-      setPost(props.post)
+      setPost({title:props.post.title, content:props.post.content})
     }
   },[props.post])
 
