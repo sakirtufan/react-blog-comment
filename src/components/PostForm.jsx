@@ -42,6 +42,14 @@ const PostForm = (props) => {
     }
   },[props.post])
 
+  const formCancel = () => {
+    if(props.post){
+      history.push(`/posts/${id}?`)
+    }else{
+      history.push('/')
+    }
+  }
+
   return (
     <React.Fragment>
       {error && (
@@ -72,7 +80,7 @@ const PostForm = (props) => {
           <button onClick={onFormSubmit} className="ui primary button">
             Send
           </button>
-          <button className="ui button">Cancel</button>
+          <button onClick={formCancel} className="ui button">Cancel</button>
         </div>
       
     </React.Fragment>
