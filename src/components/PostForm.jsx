@@ -1,11 +1,15 @@
 
 import React, { useEffect, useState } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, useParams, useHistory } from "react-router-dom";
 import { api } from "../api"
 
 const PostForm = (props) => {
   const [post, setPost] = useState({ title: "", content:"" });
   const [error, setError] = useState("");
+
+  //react router hooks
+  const { id } = useParams();
+  const history = useHistory();
 
   const onInputChange = (event) =>
     setPost({ ...post, [event.target.name]: event.target.value });
@@ -15,9 +19,9 @@ const PostForm = (props) => {
     setError("");
 
     if(props.post.title){
-      api().put(`/posts/${props.match.params.id}`,post)
+      api().put(`/posts/${id}`,post)
         .then((response) => {
-          props.history.push(`/posts/${props.match.params.id}`)
+          history.push(`/posts/${id}`)
         })
         .catch((err) => {
           setError("Post title and post content are required.");
@@ -27,7 +31,7 @@ const PostForm = (props) => {
       api()
         .post("/posts", post)
         .then((response) => {
-          props.history.push("/");
+          history.push("/");
         })
         .catch((err) => {
           setError("Post title and post content are required.");
@@ -78,4 +82,5 @@ const PostForm = (props) => {
   );
 };
 
-export default withRouter(PostForm);
+// export default withRouter(PostForm);
+export default PostForm;
