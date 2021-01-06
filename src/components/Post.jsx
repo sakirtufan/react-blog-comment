@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import PostComments from "./PostComments";
-import { Link, useHistory, useParams} from 'react-router-dom';
+import { Link,useParams} from 'react-router-dom';
 import DeleteModal from './DeleteModal';
 import { addComment, getPost } from "../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
